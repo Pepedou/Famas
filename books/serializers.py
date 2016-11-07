@@ -10,4 +10,4 @@ class BookPageSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = BookPage
-        fields = ('page_number', 'title', 'image', 'content')
+        fields = ('id', 'page_number', 'title', 'image', 'content')
