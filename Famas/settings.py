@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import dj_database_url
+from builtins import all
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'books'
+    'books',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -127,9 +129,31 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGE_SIZE': 10
 }
+
+AWS_HEADERS = {
+    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+    'Cache-Control': 'max-age=94608000',
+}
+
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_STORAGE_BUCKET_NAME')
+
+STATIC_ROOT = 'collected_static'
+MEDIA_ROOT = 'media'
+
+if all((AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,)):
+    STATICFILES_LOCATION = STATIC_ROOT
+    AWS_S3_CUSTOM_DOMAIN = '{0}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
+    STATIC_URL = 'https://{0}/{1}/'.format(AWS_S3_CUSTOM_DOMAIN, STATIC_ROOT)
+    STATICFILES_STORAGE = 'utils.custom_storages.StaticStorage'
+
+    MEDIAFILES_LOCATION = MEDIA_ROOT
+    DEFAULT_FILE_STORAGE = 'utils.custom_storages.MediaStorage'
+else:
+    STATIC_URL = '/{0}/'.format(STATIC_ROOT)
+    MEDIA_URL = '/{0}/'.format(MEDIA_ROOT)
