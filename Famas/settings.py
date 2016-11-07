@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -23,7 +25,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'otgqi+5t-u&c3by9a4cc5(79&_0njmw^5zl(@mxmxe+12+l@h2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+AT_HEROKU = os.getenv('AT_HEROKU', None)
+DEBUG = AT_HEROKU is None
 
 ALLOWED_HOSTS = ['*']
 
@@ -75,11 +78,16 @@ WSGI_APPLICATION = 'Famas.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+if AT_HEROKU is not None:
+    default = dj_database_url.config()
+else:
+    default = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+
+DATABASES = {
+    'default': default
 }
 
 
