@@ -11,10 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='bookpage',
-            name='id',
-        ),
         migrations.AddField(
             model_name='bookpage',
             name='page_number',
