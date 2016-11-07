@@ -29,10 +29,9 @@ SECRET_KEY = 'otgqi+5t-u&c3by9a4cc5(79&_0njmw^5zl(@mxmxe+12+l@h2'
 AT_HEROKU = os.getenv('AT_HEROKU', None)
 DEBUG = AT_HEROKU is None
 
-if DEBUG:
-    ALLOWED_HOSTS = []
-else:
-    ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
+
+if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
