@@ -29,8 +29,11 @@ SECRET_KEY = 'otgqi+5t-u&c3by9a4cc5(79&_0njmw^5zl(@mxmxe+12+l@h2'
 AT_HEROKU = os.getenv('AT_HEROKU', None)
 DEBUG = AT_HEROKU is None
 
-ALLOWED_HOSTS = ['*']
-
+if DEBUG:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = ['*']
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
@@ -136,23 +139,25 @@ REST_FRAMEWORK = {
 
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
 STATIC_ROOT = 'collected_static'
 MEDIA_ROOT = 'media'
 
-print('AWS: {0}'.format([str(x) for x in (AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,)]))
+if all((AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,)):
+    AWS_S3_CUSTOM_DOMAIN = '{0}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
 
-AWS_S3_CUSTOM_DOMAIN = '{0}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
+    AWS_HEADERS = {
+        'Expires': 'Thu, 15 Apr 2099 20:00:00 UTC',
+        'Cache-Control': 'max-age=94608000',
+    }
 
-AWS_HEADERS = {
-    'Expires': 'Thu, 15 Apr 2099 20:00:00 UTC',
-    'Cache-Control': 'max-age=94608000',
-}
+    STATICFILES_LOCATION = STATIC_ROOT
+    STATICFILES_STORAGE = 'utils.custom_storages.StaticStorage'
+    STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
 
-STATICFILES_LOCATION = STATIC_ROOT
-STATICFILES_STORAGE = 'utils.custom_storages.StaticStorage'
-STATIC_URL = "https://{0}/{1}/".format(AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
-
-MEDIAFILES_LOCATION = MEDIA_ROOT
-DEFAULT_FILE_STORAGE = 'utils.custom_storages.MediaStorage'
+    MEDIAFILES_LOCATION = MEDIA_ROOT
+    DEFAULT_FILE_STORAGE = 'utils.custom_storages.MediaStorage'
+else:
+    STATIC_URL = '/{0}/'.format(STATIC_ROOT)
+    MEDIA_URL = '/{0}/'.format(MEDIA_ROOT)
