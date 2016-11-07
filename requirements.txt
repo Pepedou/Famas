@@ -2,4 +2,4 @@ dj-database-url==0.4.1
 Django==1.10.3
 djangorestframework==3.5.2
 Pillow==3.4.2
-pyscopg2=2.6.2
+psycopg2==2.6.2
