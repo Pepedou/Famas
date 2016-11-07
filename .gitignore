@@ -1,5 +1,6 @@
 .idea/
 *.sqlite3
+__pychache__/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
