@@ -11,6 +11,7 @@ class BookPage(models.Model):
     """
     The page of a book. It consists of a title, an image and its content.
     """
+    page_number = models.PositiveSmallIntegerField(primary_key=True)
     title = models.CharField(max_length=100, default="")
     image = models.ImageField(upload_to='images/')
     content = models.CharField(max_length=1024, default="")
