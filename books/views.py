@@ -8,5 +8,5 @@ class BookPageViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows BookPages to be viewed or edited.
     """
-    queryset = BookPage.objects.all()
+    queryset = BookPage.objects.order_by('page_number')
     serializer_class = BookPageSerializer
