@@ -170,4 +170,5 @@ else:
 
 PUSH_NOTIFICATIONS_SETTINGS = {
     "APNS_CERTIFICATE": 'var/cert/apns-dev.pem',
+    'APNS_HOST': 'gateway.sandbox.push.apple.com'
 }
