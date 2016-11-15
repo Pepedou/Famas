@@ -11,10 +11,9 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import dj_database_url
 from builtins import all
+
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -46,7 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'books',
-    'storages'
+    'storages',
+    'push_notifications'
 ]
 
 MIDDLEWARE = [
@@ -167,3 +167,7 @@ if all((AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,)):
 else:
     STATIC_URL = '/{0}/'.format(STATIC_ROOT)
     MEDIA_URL = '/{0}/'.format(MEDIA_ROOT)
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+    "APNS_CERTIFICATE": 'var/cert/apns-dev.pem',
+}
