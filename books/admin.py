@@ -11,6 +11,9 @@ class BookPageModelAdmin(admin.ModelAdmin):
     """
     form = BookPageForm
     actions = ['send_push_notification']
+    list_display = ('title', 'page_number', 'image',)
+    list_display_links = list_display
+    ordering = ('page_number',)
 
     def send_push_notification(self, request, queryset):
         """
