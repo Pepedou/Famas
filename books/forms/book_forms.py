@@ -19,9 +19,11 @@ class BookPageForm(ModelForm):
         send_push_notification = self.cleaned_data.get('send_push_notification', False)
 
         if send_push_notification:
-            for device in APNSDevice.objects.filter(active=True):
-                device.send_message('Una nueva página ha llegado de otra dimensión: Página {0} - "{1}"'
-                                    .format(book.page_number + 1, book.title),
-                                    badge=book.page_number + 1, sound='NotificationSound.wav')
+            devices = APNSDevice.objects.filter(active=True)
+
+            if devices.count:
+                devices.send_message('Una nueva página ha llegado de otra dimensión: Página {0} - "{1}"'.format(
+                    book.page_number + 1, book.title),
+                    badge=book.page_number + 1, sound='NotificationSound.wav')
 
         return book
