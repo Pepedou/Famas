@@ -169,6 +169,5 @@ else:
     MEDIA_URL = '/{0}/'.format(MEDIA_ROOT)
 
 PUSH_NOTIFICATIONS_SETTINGS = {
-    "APNS_CERTIFICATE": 'var/cert/apns-dev.pem',
-    'APNS_HOST': 'gateway.sandbox.push.apple.com'
+    "APNS_CERTIFICATE": 'var/cert/apns-dev.pem'
 }
