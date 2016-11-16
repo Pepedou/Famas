@@ -2,16 +2,30 @@ from builtins import str
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Max
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+
+
+def get_next_page_number():
+    """
+    Returns the following number after the maximum page number registered.
+    :return: An integer.
+    """
+    max_page_number = BookPage.objects.aggregate(Max('page_number'))['page_number__max']
+
+    if max_page_number is None:
+        return 0
+    else:
+        return max_page_number + 1
 
 
 class BookPage(models.Model):
     """
     The page of a book. It consists of a title, an image and its content.
     """
-    page_number = models.PositiveSmallIntegerField(default=0, unique=True)
+    page_number = models.PositiveSmallIntegerField(default=get_next_page_number, unique=True)
     title = models.CharField(max_length=13, default="")
     image = models.ImageField(upload_to='images/')
     content = models.TextField(default="")
