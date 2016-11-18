@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 from builtins import all
+from django.contrib.admin import AdminSite
 
 import dj_database_url
 
@@ -32,6 +33,10 @@ ALLOWED_HOSTS = ['*']
 
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+AdminSite.site_header = "Interdimensional Magical Portal"
+AdminSite.site_title = "Famas"
+AdminSite.index_title = "Book transformations"
 
 # Application definition
 
