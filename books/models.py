@@ -44,9 +44,9 @@ class BookPage(models.Model):
         book_page = super(BookPage, self).save(force_insert, force_update, using, update_fields)
 
         sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
-        from_email = Email("test@example.com")
+        from_email = Email("codificadoramexico@gmail.com")
         subject = "Hello World from the SendGrid Python Library!"
-        to_email = Email("test@example.com")
+        to_email = Email("pepedou@gmail.com")
         content = Content("text/plain", "Hello, Email!")
         mail = Mail(from_email, subject, to_email, content)
         response = sg.client.mail.send.post(request_body=mail.get())
