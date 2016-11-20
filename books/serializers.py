@@ -1,3 +1,4 @@
+from push_notifications.models import APNSDevice
 from rest_framework import serializers
 
 from books.models import BookPage
@@ -11,3 +12,13 @@ class BookPageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = BookPage
         fields = ('id', 'page_number', 'title', 'image', 'content')
+
+    def update(self, instance, validated_data):
+        instance = super(BookPageSerializer, self).update(instance, validated_data)
+
+        for device in APNSDevice.objects.exclude(name='iPhone 5S MMG'):
+            device.send_message('La protagonista ha completado la página "{0}".'.format(
+                instance.title
+            ), badge=1, sound='NotificationSound.wav')
+
+        return instance
