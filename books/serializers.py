@@ -1,3 +1,4 @@
+from django.db.models import Q
 from push_notifications.models import APNSDevice
 from rest_framework import serializers
 
@@ -16,7 +17,7 @@ class BookPageSerializer(serializers.HyperlinkedModelSerializer):
     def update(self, instance, validated_data):
         instance = super(BookPageSerializer, self).update(instance, validated_data)
 
-        for device in APNSDevice.objects.exclude(name='iPhone 5S MMG', active=False):
+        for device in APNSDevice.objects.exclude(Q(name='iPhone 5S MMG') | Q(active=False)):
             device.send_message('La protagonista ha completado la página "{0}".'.format(
                 instance.title
             ), badge=1, sound='NotificationSound.wav')
